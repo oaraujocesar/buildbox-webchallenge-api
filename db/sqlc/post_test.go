@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreatePost(t *testing.T) {
+func createRandomPost(t *testing.T) Post {
 	arg := CreatePostParams{
 		ImageUrl: "https://avatars.githubusercontent.com/u/61256606?s=400&u=87690975a21547ae6f62be49567d2d712383fa16&v=4",
 		Name:     "César O. Araújo",
@@ -25,4 +25,9 @@ func TestCreatePost(t *testing.T) {
 
 	require.NotZero(t, post.ID)
 	require.NotZero(t, post.CreatedAt)
+
+	return post
+}
+func TestCreatePost(t *testing.T) {
+	createRandomPost(t)
 }
