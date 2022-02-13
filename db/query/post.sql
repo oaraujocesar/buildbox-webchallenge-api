@@ -15,6 +15,6 @@ FROM posts
 ORDER BY id
 LIMIT $1 OFFSET $2;
 
--- name: DeleteAccount :exec
+-- name: DeletePost :exec
 DELETE FROM posts
 WHERE id = $1;
