@@ -19,4 +19,7 @@ test:
 sqlc:
 	sqlc generate
 
-.PHONY: createdb createdb dropdb migrateup migratedown
+server:
+	air
+
+.PHONY: createdb createdb dropdb migrateup migratedown test sqlc server
