@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -67,4 +68,40 @@ func (server *Server) listPosts(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, accounts)
+}
+
+type getOrDeletePostRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (server *Server) deletePost(ctx *gin.Context) {
+	var req getOrDeletePostRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+
+		return
+	}
+
+	post, err := server.store.GetPost(ctx, req.ID)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+
+		return
+	}
+
+	err = server.store.DeletePost(ctx, post.ID)
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+
+		return
+	}
 }
